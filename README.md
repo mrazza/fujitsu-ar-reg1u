@@ -71,9 +71,9 @@ The first 5 bytes are a header that is stable for all commands.
 The last 2 bytes differ for each command in ways I do not yet understand.
 ```
 
-Turn device OFF: `28C600080840BF`
-Change fan angle (SET button): `28C600080836C9`
-Toggle economy mode: `28C6000808906F`
+Turn device OFF: `28C600080840BF`  
+Change fan angle (SET button): `28C600080836C9`  
+Toggle economy mode: `28C6000808906F`  
 Toggle powerful mode: `28C60008089C63`
 
 ## Producing Signals
