@@ -42,7 +42,7 @@ These commands are 128 bits in length. They encode the following data:
 
 \* The remote converts to Fahrenheit by taking the temperature offset, multiplying it by 2, and adding that value to 60°F.
 
-Much of this information is split into 4-bit chunks, referred to as nibbles below. Consider the following:
+Much of this information is split into 4-bit chunks (conveniently 1 hex character), referred to as nibbles below. Consider the following:
 ```
 28C60008087F900CXXX0XX00000004XX
 |______________|
