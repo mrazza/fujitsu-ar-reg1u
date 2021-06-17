@@ -5,7 +5,8 @@ This document outlines how the AR-REG1U Fujitsu Mini-split IR remote encodes sig
 
 ## Signal Encoding
 
-The AR-REG1U encodes binary data by varying the duration the IR transmitter in the remote is OFF. The wall-mounted mini-split unit receives these pulsating signals (the ON/OFF of the remote's IR transmitter), converts them to binary, and then decodes them. As you might expect, before you press a button on the remote, the transmitter is OFF. Once you press a button, say to increase the desired temperature, the remote's IR transmitter starts flashing. _Every_ command starts with the same duration pulse, likely to act as a signal for the mini-split unit to pay attention a signal is coming:  
+The AR-REG1U encodes binary data by varying the duration the IR transmitter in the remote is OFF. The wall-mounted mini-split unit receives these pulsating signals (the ON/OFF of the remote's IR transmitter), converts them to binary, and then decodes them. As you might expect, before you press a button on the remote, the transmitter is OFF. Once you press a button, say to increase the desired temperature, the remote's IR transmitter starts flashing. _Every_ command starts with the same duration pulse, likely to act as a signal for the mini-split unit to pay attention a signal is coming:
+
 **ON** for ~3.25 ms  
 **OFF** for ~1.60 ms  
 
@@ -74,3 +75,7 @@ Turn device OFF: `28C600080840BF`
 Change fan angle (SET button): `28C600080836C9`
 Toggle economy mode: `28C6000808906F`
 Toggle powerful mode: `28C60008089C63`
+
+## Producing Signals
+
+Using the information above, it should be trivial to produce a signal that would have the outcome you want. The only thing that is important to remeber is the initial pulse before binary data starts.
