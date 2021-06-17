@@ -11,7 +11,7 @@ The AR-REG1U encodes binary data by varying the duration the IR transmitter in t
 
 After this initial pulse, the rest of the signal represent binary. Each pulse ON is about 0.4ms, however, as mentioned earlier the significant portion of the signal is when the IR transmitter is OFF in between ON pulses. If the OFF duration between pulses is ~0.4ms, this is a binary 0. If the OFF duration is closer to 1.2ms, this is a binary 1. Using this logic we can encode arbitrary binary values in the same format used by the AR-REG1U remote. For instance, let's encode the number 1234 or 10011010010 in binary. Read the following table left to right, top to bottom. All times are in milliseconds.
 
-| IR LED ON | IR LED OFF | BINARY VALUE |
+| IR LED ON (ms) | IR LED OFF (ms) | BINARY VALUE |
 |--|--|-- |
 | 3.25 | 1.6 | N/A |
 | 0.4 | 1.2 | 1 |
