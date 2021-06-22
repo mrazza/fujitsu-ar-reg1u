@@ -2,6 +2,8 @@
 
 This document outlines how the AR-REG1U Fujitsu Mini-split IR remote encodes signals to send to the wall-mounted mini-split unit. It's entirely possible other Fujitsu remotes, or even other mini-split manufacturer's remotes, operate on identical signals or, at the very least, use the same principles with small modifications to specifics. However, the AR-REG1U is the remote I have and the following was derived by capturing signals from the remote using a simple circuit (with the TSOP98438 IR receiver), an ARM microcontroller, and custom software. I then reverse engineered the captured signals.
 
+**Based on the details in this document, I will soon release software for capturing and decoding signals from the AR-REG1U remote as well as software to produce and transmit signals to the mini-split.**
+
 ## Signal Encoding
 
 The AR-REG1U encodes binary data by varying the duration the IR transmitter in the remote is OFF. The wall-mounted mini-split unit receives these pulsating signals (the ON/OFF of the remote's IR transmitter), converts them to binary, and then decodes them. As you might expect, before you press a button on the remote, the transmitter is OFF. Once you press a button, say to increase the desired temperature, the remote's IR transmitter starts flashing. _Every_ command starts with the same duration pulse, likely to act as a signal for the mini-split unit to pay attention a signal is coming:
