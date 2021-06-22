@@ -1,6 +1,6 @@
 # AR-REG1U Model Fujitsu Mini-split Remote Infrared Signals
 
-This document outlines how the AR-REG1U Fujitsu Mini-split IR remote encodes signals to send to the wall-mounted mini-split unit. It's entirely possible other Fujitsu remotes, or even other mini-split manufacture's remotes, operate on the same principles. However, the AR-REG1U is the remote I have and the following was derived by capturing signals from the remote using custom software and reverse engineering the captured signals.
+This document outlines how the AR-REG1U Fujitsu Mini-split IR remote encodes signals to send to the wall-mounted mini-split unit. It's entirely possible other Fujitsu remotes, or even other mini-split manufacture's remotes, operate on identical signals or, at the very least, use the same principles with small modifications to specifics. However, the AR-REG1U is the remote I have and the following was derived by capturing signals from the remote using a simple circuit (with the TSOP98438 IR receiver), an ARM microcontroller, and custom software. I then reverse engineered the captured signals.
 
 ## Signal Encoding
 
