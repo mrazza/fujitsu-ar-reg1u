@@ -29,6 +29,10 @@ After this initial pulse, the rest of the signal represent binary. Each pulse ON
 
 It may be surprising that the meaningful portion of the signal is when the LED is OFF, but consider that the LED draws no power when it is OFF. It is likely slightly more efficient to vary the duration on the OFF portion of the cycle while leaving the ON portion as short as possible.
 
+Here is an example signal captured via an oscilliscope. Note that the IR receiver proped to capture this signal produces a HIGH when there is no IR signal present and a LOW when there is (so inverted from what you might expect).
+
+![](waveform.png?raw=true)
+
 ## Command Representation
 There are two broad types of commands the remote sends: those that encode temperature, mode, and fan selections, and those that do not (which I will refer to as _Action Commands_).
 
