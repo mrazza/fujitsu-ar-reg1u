@@ -140,6 +140,9 @@ Using the example signal from before, we would calculate the checksum as follows
 28C60008087F900C02800000000004F6
 ```
 
+#### Timer Function
+This remote also supports timer functions. I suspect these are encoded in the long string of zeros before the checksum but have not bothered reverse engineering this functionality.
+
 ### Action Commands
 These commands are 56 bits in length. I have not been as successful divining the meaning of the individual bits in these commands; however, given that they perform a single action without any configuration, a look-up table is as good as constructing the commands yourself.
 
