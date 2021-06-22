@@ -131,7 +131,7 @@ Using the example signal from before, we would calculate the checksum as follows
 13: 00 = 0000 0000 = 0000 0000 = 0
 14: 00 = 0000 0000 = 0000 0000 = 0
 ---------------------------------------
-+                                65 =
++                                65
 
 176 - 65 = 111 = 0110 1111 = 1111 0110 = F6
 
