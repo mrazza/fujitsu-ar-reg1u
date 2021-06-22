@@ -1,6 +1,6 @@
 # AR-REG1U Model Fujitsu Mini-split Remote Infrared Signals
 
-This document outlines how the AR-REG1U Fujitsu Mini-split IR remote encodes signals to send to the wall-mounted mini-split unit. It's entirely possible other Fujitsu remotes, or even other mini-split manufacture's remotes, operate on identical signals or, at the very least, use the same principles with small modifications to specifics. However, the AR-REG1U is the remote I have and the following was derived by capturing signals from the remote using a simple circuit (with the TSOP98438 IR receiver), an ARM microcontroller, and custom software. I then reverse engineered the captured signals.
+This document outlines how the AR-REG1U Fujitsu Mini-split IR remote encodes signals to send to the wall-mounted mini-split unit. It's entirely possible other Fujitsu remotes, or even other mini-split manufacturer's remotes, operate on identical signals or, at the very least, use the same principles with small modifications to specifics. However, the AR-REG1U is the remote I have and the following was derived by capturing signals from the remote using a simple circuit (with the TSOP98438 IR receiver), an ARM microcontroller, and custom software. I then reverse engineered the captured signals.
 
 ## Signal Encoding
 
@@ -9,7 +9,7 @@ The AR-REG1U encodes binary data by varying the duration the IR transmitter in t
 **ON** for ~3.25 ms  
 **OFF** for ~1.60 ms  
 
-After this initial pulse, the rest of the signal represent binary. Each pulse ON is about 0.4ms, however, as mentioned earlier the significant portion of the signal is when the IR transmitter is OFF in between ON pulses. If the OFF duration between pulses is ~0.4ms, this is a binary 0. If the OFF duration is closer to 1.2ms, this is a binary 1. Using this logic we can encode arbitrary binary values in the same format used by the AR-REG1U remote. For instance, let's encode the number 1234 or 10011010010 in binary. Read the following table left to right, top to bottom. All times are in milliseconds.
+After this initial pulse, the rest of the signal encodes binary data. Each pulse ON is about 0.4ms, however, as mentioned earlier the significant portion of the signal is when the IR transmitter is OFF in between ON pulses. If the OFF duration between pulses is ~0.4ms, this is a binary 0. If the OFF duration is closer to 1.2ms, this is a binary 1. Using this logic we can encode arbitrary binary values in the same format used by the AR-REG1U remote. For instance, let's encode the number 1234 or 10011010010 in binary. Read the following table left to right, top to bottom. All times are in milliseconds.
 
 | IR LED ON (ms) | IR LED OFF (ms) | BINARY VALUE |
 |--|--|-- |
@@ -28,9 +28,9 @@ After this initial pulse, the rest of the signal represent binary. Each pulse ON
 
 It may be surprising that the meaningful portion of the signal is when the LED is OFF, but consider that the LED draws no power when it is OFF. It is likely slightly more efficient to vary the duration on the OFF portion of the cycle while leaving the ON portion as short as possible.
 
-Here is an example signal captured via an oscilliscope. Note that the IR receiver proped to capture this signal produces a HIGH when there is no IR signal present and a LOW when there is (so inverted from what you might expect).
+Here is an example signal captured via an oscilloscope. Note that the IR receiver (TSOP98438) probed to capture this signal produces a HIGH when there is no IR signal present and a LOW when there is (so inverted from what you might expect).
 
-![](waveform.png?raw=true)
+![IR receiver waveform](waveform.png?raw=true)
 
 Note the long LED ON (LOW) and LED OFF (HIGH) pulse at the start followed by the standard binary representation. As you'll see below, the binary data following this initial pulse aligns with the command header (0x28C...).
 
@@ -94,7 +94,7 @@ SET_TEMPERATURE = 0
 TURN_DEVICE_ON  = 1
 ```
 
-Therefore, an IR command to set a minisplit (without the checksum) that is already on into `COOL` mode with `AUTO` fan speed at `20°C (68°F)` in `STATIC` fan mode would be:
+Therefore, an IR command to set a mini-split (without the checksum) that is already on into `COOL` mode with `AUTO` fan speed at `20°C (68°F)` in `STATIC` fan mode would be:
 ```
 Nibble 17: SET_TEMPERATURE = 0 = 0000 = 0000 = 0
 Nibble 18: 20 - 16         = 4 = 0100 = 0010 = 2
@@ -105,9 +105,9 @@ Nibble 22: STATIC          = 0 = 0000 = 0000 = 0
 ```
 
 #### Checksum
-The last byte of the signal is the checksum. This is important due to the unreliable nature of IR transmission. A checksum is used so that the minisplit system can be confident that it received a valid and complete signal. The checksum is calculated by adding together bytes 9 through 14 (after reversing the bits in them) inclusive, then subtracting that sum from, what I refer to as, the _checksum root_ and, finally, bit-reversing the result. For the AR-REG1U, the _checksum root_ is 176.
+The last byte of the signal is the checksum. This is important due to the unreliable nature of IR transmission. A checksum is used so that the mini-split system can be confident that it received a valid and complete signal. The checksum is calculated by adding together bytes 9 through 14 (after reversing the bits in them) inclusive, then subtracting that sum from, what I refer to as, the _checksum root_ and, finally, bit-reversing the result. For the AR-REG1U, the _checksum root_ is 176.
 
-Consider the following psuedo code:
+Consider the following pseudo code:
 ```
     private static byte GenerateChecksum(Signal signal, int checksumRoot)
     {
@@ -157,4 +157,4 @@ Toggle powerful mode: `28C60008089C63`
 
 ## Producing Signals
 
-Using the information above, it should be trivial to produce a signal that would have the outcome you want. The only thing that is important to remeber is the initial pulse before binary data starts.
+Using the information above, it should be trivial to produce a signal that would have the outcome you want. The only thing that is important to remember is the initial pulse before binary data starts.
