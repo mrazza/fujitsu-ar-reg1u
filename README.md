@@ -33,6 +33,8 @@ Here is an example signal captured via an oscilliscope. Note that the IR receive
 
 ![](waveform.png?raw=true)
 
+Note the long LED ON (LOW) and LED OFF (HIGH) pulse at the start followed by the standard binary representation. As you'll see below, the binary data following this initial pulse aligns with the command header (0x28C...).
+
 ## Command Representation
 There are two broad types of commands the remote sends: those that encode temperature, mode, and fan selections, and those that do not (which I will refer to as _Action Commands_).
 
