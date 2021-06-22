@@ -1,4 +1,3 @@
-
 # AR-REG1U Model Fujitsu Mini-split Remote Infrared Signals
 
 This document outlines how the AR-REG1U Fujitsu Mini-split IR remote encodes signals to send to the wall-mounted mini-split unit. It's entirely possible other Fujitsu remotes, or even other mini-split manufacture's remotes, operate on the same principles. However, the AR-REG1U is the remote I have and the following was derived by capturing signals from the remote using custom software and reverse engineering the captured signals.
@@ -65,8 +64,82 @@ The last byte (nibbles 31 and 32) are a checksum.
 ```
 When reading/writing the nibbles, it is important to note that the AR-REG1U reverses the order of bits within a single nibble. To clarify, the decimal number 4 (0100) would be represented in the bit stream as 0010. This is the case for all 5 nibbles mentioned above as well as the checksum.
 
+#### Mode of Operation
+```
+AUTO = 0
+COOL = 1
+DRY  = 2
+FAN  = 3
+HEAT = 4
+```
+
+#### Fan Speed
+```
+AUTO   = 0
+HIGH   = 1
+MEDIUM = 2
+LOW    = 3
+QUIET  = 4
+```
+
+#### Fan Mode
+```
+STATIC = 0
+SWING  = 1
+```
+
+#### Command
+```
+SET_TEMPERATURE = 0
+TURN_DEVICE_ON  = 1
+```
+
+Therefore, an IR command to set a minisplit (without the checksum) that is already on into `COOL` mode with `AUTO` fan speed at `20°C (68°F)` in `STATIC` fan mode would be:
+```
+Nibble 17: SET_TEMPERATURE = 0 = 0000 = 0000 = 0
+Nibble 18: 20 - 16         = 4 = 0100 = 0010 = 2
+Nibble 19: COOL            = 1 = 0001 = 1000 = 8
+Nibble 21: AUTO            = 0 = 0000 = 0000 = 0
+Nibble 22: STATIC          = 0 = 0000 = 0000 = 0
+28C60008087F900C02800000000004XX
+```
+
+#### Checksum
+The last byte of the signal is the checksum. This is important due to the unreliable nature of IR transmission. A checksum is used so that the minisplit system can be confident that it received a valid and complete signal. The checksum is calculated by adding together bytes 9 through 14 (after reversing the bits in them) inclusive, then subtracting that sum from, what I refer to as, the _checksum root_ and, finally, bit-reversing the result. For the AR-REG1U, the _checksum root_ is 176.
+
+Consider the following psuedo code:
+```
+    private static byte GenerateChecksum(Signal signal, int checksumRoot)
+    {
+        int sum = 0;
+        for (int index = 8; index < 14; index++)
+        {
+            sum += signal.GetReversedByte(index);
+        }
+        return Signal.ReverseByte((byte)((checksumRoot - sum) % 256));
+    }
+```
+
+Using the example signal from before, we would calculate the checksum as follows:
+```
+28C60008087F900C02800000000004XX
+
+9:  02 = 0000 0010 = 0100 0000 = 64
+10: 80 = 1000 0000 = 0000 0001 = 1
+11: 00 = 0000 0000 = 0000 0000 = 0
+12: 00 = 0000 0000 = 0000 0000 = 0
+13: 00 = 0000 0000 = 0000 0000 = 0
+14: 00 = 0000 0000 = 0000 0000 = 0
+---------------------------------------
++                                65 =
+
+176 - 65 = 111 = 0110 1111 = 1111 0110 = F6
+
+28C60008087F900C02800000000004F6
+```
+
 ### Action Commands
-These commands are 56 bits in length. I have not been as successful divining the meaning of the individual bits in these commands, however, given that they perform a single action without any configuration a look-up table is as good as constructing the commands yourself.
+These commands are 56 bits in length. I have not been as successful divining the meaning of the individual bits in these commands; however, given that they perform a single action without any configuration, a look-up table is as good as constructing the commands yourself.
 
 ```
 28C6000808XXXX
